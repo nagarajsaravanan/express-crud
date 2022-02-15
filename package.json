@@ -1,0 +1,30 @@
+{
+  "name": "express-crud",
+  "version": "1.0.0",
+  "description": "crud using express js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nagarajsaravanan/express-crud.git"
+  },
+  "keywords": [
+    "express",
+    "crud",
+    "node",
+    "js",
+    "javascript"
+  ],
+  "author": "ngrj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nagarajsaravanan/express-crud/issues"
+  },
+  "homepage": "https://github.com/nagarajsaravanan/express-crud#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.2.1"
+  }
+}
