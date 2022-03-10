@@ -2,6 +2,8 @@ const express = require('express')
 const imageRoute = express.Router()
 const { get, addImage } = require('./imageController')
 const multer = require('multer')
+const isAuth = require('./../../middleware/verifyToken')
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'public/images/'),
     filename: (req, file, cb) => {
@@ -12,6 +14,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 imageRoute.get('/', get)
-imageRoute.post('/add', upload.single('image'), addImage)
+imageRoute.post('/add', isAuth(), upload.single('image'), addImage)
 
 module.exports = imageRoute
