@@ -2,6 +2,8 @@ const { successResponse, failureResponse } = require("../../utils/response")
 const userModel = require('./../../models/users.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const { mailService } = require('../emailController/emailController')
+const { ObjectId } = require('mongoose').Types;
 
 const login = async (req, res) => {
     try {
@@ -13,7 +15,7 @@ const login = async (req, res) => {
                 if (validPassword) {
                     delete user[0].password
                     var token = jwt.sign({ name: user.user_name, email: user.email }, process.env.JWT_SECRET || "express-crud");
-                    successResponse(res, { response: { user: {...user[0], token} }, message: 'login successfully.' })
+                    successResponse(res, { response: { user: { ...user[0], token } }, message: 'login successfully.' })
                 } else {
                     failureResponse(res, { response: 1, message: 'invalid password.', status: 401 })
                 }
@@ -54,8 +56,14 @@ const addOrUpdateUser = async (req, res) => {
             saveData = await userModel.create(data)
         }
         delete saveData.password
+        // send mail for the new customer
+        if (id) {
+            let data = { type: "new-customer", payload: saveData }
+            await mailService(data);
+        }
         saveData ? successResponse(res, { response: { user: saveData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
     } catch (error) {
+        console.log('error', error)
         failureResponse(res, { response: 1, message: errorMsg })
     }
 }

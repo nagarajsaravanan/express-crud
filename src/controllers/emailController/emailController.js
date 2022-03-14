@@ -1,56 +1,57 @@
-const { successResponse, failureResponse } = require('../../utils/response')
-const { ObjectId } = require('mongoose').Types;
+const nodemailer = require('nodemailer');
 
-// add or update single product details
-const addOrUpdate = async (req, res) => {
-    try {
-        const { product_name, product_description, is_active } = req.body
-        const { id } = req.params;
-        const errorMsg = id ? 'failed to update the product details' : 'failed to add the product details'
-        const successMsg = id ? 'Product details updated successfully' : 'Product details added successfully'
-        if (id) {
-            const data = {
-                product_name,
-                product_description,
-                is_active
-            }
-            const updateData = await productModel.findByIdAndUpdate(new ObjectId(id), data, {
-                new: true
-            });
+// send email
+const sendMail = async (data) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USERNAME,
+        to: data.to,
+        subject: data.subject,
+        html: data.template,
+    };
 
-            updateData ? successResponse(res, { response: { products: updateData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
-        } else {
-            const data = {
-                product_name,
-                product_description,
-                is_active,
-                is_archived: false
-            }
-            const newData = await productModel.create(data)
+    let transport = await connectMail();
 
-            newData ? successResponse(res, { response: { products: newData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
-        }
-    } catch (error) {
-        failureResponse(res, { response: 1, message: errorMsg })
-    }
+    transport.sendMail(mailOptions)
 }
 
-// soft delete the single record
-const destroy = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const data = {
-            is_archived: true
+const connectMail = async () => {
+    return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
         }
-        const updateData = await productModel.findByIdAndUpdate(new ObjectId(id), data, {
-            new: true
-        });
-
-        updateData ? successResponse(res, { message: 'deleted successfully' }) : failureResponse(res, { message: 'error in delete the record' })
-    } catch (error) {
-        failureResponse(res, { response: 1, message: 'error in delete the record' })
+    });
+}
+const mailService = async (data) => {
+    switch (data.type) {
+        case 'new-customer':
+            sendCustomerWelcomeMail(data)
+            break;
+        case 'update-customer':
+            sendCustomerUpdateMail(data)
+            break;
     }
 }
+const sendCustomerWelcomeMail = async (data) => {
+    data.payload.template = `
+    <div style="padding: 30px 100px;">
+    <div style=" text-align: center; background: yellow; color: green; padding: 70px; font-size: 27px; text-transform: uppercase; font-weight: bold;">Node Training Activities</div>
+    <div style="padding: 10px 50px;">
+    <h3 style="margin-bottom: 0;">Hi ${data.payload.user_name}</h3>
+    <p style="text-indent: 30px;font-size: 14px; margin-top: 0;">You have successfully singup with the Node Training Activities!<p>
+    </br>
+    </br>
+    <p style="font-size: 14px;font-weight: bold; margin-bottom: 0;">Thanks</p>
+    <p style="font-size: 14px;margin-top: 0;">Node Training Activities</p>
+    </div>
+    <div style=" text-align: center; background: #d52c2c; padding: 70px; font-size: 27px; text-transform: uppercase; font-weight: bold;">Footer Content</div>
+    </div>`
+    data.payload.to = data.payload.email
+    data.payload.subject = "Welcome to Node Training Activities"
+    sendMail(data.payload)
+}
+const sendCustomerUpdateMail = async (data) => {
 
-
-module.exports = { get, addOrUpdate, destroy }
+}
+module.exports = { mailService }
