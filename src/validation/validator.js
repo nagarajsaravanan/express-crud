@@ -29,5 +29,13 @@ module.exports = {
 			email: "required|email",
 			password: "required|string"
 		}
+	},
+	documentUpload: {
+		create: {
+			customer_document: 'required|mime:pdf'
+		},
+		update: {
+			customer_document: 'required|mime:pdf',
+		}
 	}
 };

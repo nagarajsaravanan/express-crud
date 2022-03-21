@@ -14,7 +14,8 @@ const login = async (req, res) => {
                 const validPassword = await bcrypt.compare(data.password, user[0].password)
                 if (validPassword) {
                     delete user[0].password
-                    var token = jwt.sign({ name: user.user_name, email: user.email }, process.env.JWT_SECRET || "express-crud");
+                    console.log('{ name: user[0].user_name, email: user[0].email }',{ name: user[0].user_name, email: user[0].email }, user)
+                    var token = jwt.sign({ id: user[0]._id, name: user[0].user_name, email: user[0].email }, process.env.JWT_SECRET || "express-crud");
                     successResponse(res, { response: { user: { ...user[0], token } }, message: 'login successfully.' })
                 } else {
                     failureResponse(res, { response: 1, message: 'invalid password.', status: 401 })

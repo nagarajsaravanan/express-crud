@@ -8,6 +8,7 @@ const isAuth = () => {
         try {
             const jwtPayload = await jwt.verify(token, process.env.JWT_SECRET || "express-crud")
             if(jwtPayload){
+                req.authUser = jwtPayload;
                 next();
             } else {
                 return failureResponse(res, { status: 401, message: 'please login to continue.' });

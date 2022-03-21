@@ -5,7 +5,8 @@ const app = express();
 const port = 5000;
 
 // body pareser
-app.use(express.json());
+app.use(express.json({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // public path
 app.use(express.static('public'))
@@ -24,6 +25,13 @@ app.use('/api/v1/image', require('./src/controllers/imageController/router'));
 
 // login
 app.use('/api/v1/customer', require('./src/controllers/customer/router'))
+
+// file operations
+app.use('/api/v1/document', require('./src/controllers/customerDocument/router'))
+
+// error handler
+app.use(require('./src/exceptionHandler/exceptionHandler'))
+
 app.listen(port, () => {
     console.log(`api is listening at ${port}`);
 })
