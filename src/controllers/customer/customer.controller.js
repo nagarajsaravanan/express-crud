@@ -14,7 +14,6 @@ const login = async (req, res) => {
                 const validPassword = await bcrypt.compare(data.password, user[0].password)
                 if (validPassword) {
                     delete user[0].password
-                    console.log('{ name: user[0].user_name, email: user[0].email }',{ name: user[0].user_name, email: user[0].email }, user)
                     var token = jwt.sign({ id: user[0]._id, name: user[0].user_name, email: user[0].email }, process.env.JWT_SECRET || "express-crud");
                     successResponse(res, { response: { user: { ...user[0], token } }, message: 'login successfully.' })
                 } else {
@@ -30,7 +29,7 @@ const login = async (req, res) => {
 }
 
 const addOrUpdateUser = async (req, res) => {
-    const { user_name, email, password, phone, is_active } = req.body
+    const { user_name, email, password, phone, is_active, age, team } = req.body
     const { id } = req.params;
     const errorMsg = id ? 'failed to update the user details' : 'failed to add the user details'
     const successMsg = id ? 'User details updated successfully' : 'User details added successfully'
@@ -41,6 +40,8 @@ const addOrUpdateUser = async (req, res) => {
                 user_name,
                 email,
                 phone,
+                age,
+                team,
                 is_active
             }
             saveData = await userModel.findByIdAndUpdate(new ObjectId(id), data, {
@@ -52,6 +53,8 @@ const addOrUpdateUser = async (req, res) => {
                 email,
                 password: await encriptPassword(password),
                 phone,
+                age,
+                team,
                 is_active: is_active ? is_active : true
             }
             saveData = await userModel.create(data)
@@ -64,7 +67,6 @@ const addOrUpdateUser = async (req, res) => {
         }
         saveData ? successResponse(res, { response: { user: saveData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
     } catch (error) {
-        console.log('error', error)
         failureResponse(res, { response: 1, message: errorMsg })
     }
 }

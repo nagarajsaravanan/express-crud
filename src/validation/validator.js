@@ -17,12 +17,16 @@ module.exports = {
 			email: 'required|email|unique:users,email',
 			password: 'required|string|minLength:6',
 			phone: 'required|minLength:10',
+			age: 'required|numeric',
+			team: 'required|string',
 			is_active: 'required|boolean',
 		},
 		update: {
 			user_name: 'required|string|minLength:3|unique:users,user_name,id',
 			email: 'required|email|unique:users,email,id',
 			phone: 'required|minLength:10',
+			age: 'required|numeric',
+			team: 'required|string',
 			is_active: 'required|boolean',
 		},
 		login: {

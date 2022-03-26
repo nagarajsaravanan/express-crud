@@ -18,7 +18,7 @@ const addOrUpdate = async (req, res) => {
         const successMsg = checkDoc ? 'document details updated successfully' : 'document details added successfully'
         if (checkDoc) {
             const data = {
-                user_id: req.authUser.id,
+                user_id: ObjectId(req.authUser.id),
                 file: `/documents/${file.filename}`
             }
             saveData = await customerDocModel.findByIdAndUpdate(new ObjectId(checkDoc[0]._id), data, {

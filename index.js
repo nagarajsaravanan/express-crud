@@ -29,6 +29,9 @@ app.use('/api/v1/customer', require('./src/controllers/customer/router'))
 // file operations
 app.use('/api/v1/document', require('./src/controllers/customerDocument/router'))
 
+// file operations
+app.use('/api/v1/query', require('./src/controllers/queryController/router'))
+
 // error handler
 app.use(require('./src/exceptionHandler/exceptionHandler'))
 

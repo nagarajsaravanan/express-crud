@@ -12,7 +12,6 @@ var _id = '';
 const Validation = validate => {
 	return async (req, res, next) => {
 		try {
-			console.log('req',req.file);
 			_id = req.params.id;
 			const validationRules = new niv.Validator(req.body, validate);
 			const matched = await validationRules.check();

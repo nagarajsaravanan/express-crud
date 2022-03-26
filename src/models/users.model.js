@@ -8,6 +8,8 @@ module.exports = mongoose.model(
         phone: { type: Number, default: null },
         password: { type: String, default: null },
         access_token: { type: String, default: null },
+        age: { type: Number, default: null },
+        team: { type: String, default: null },
         is_active: { type: Boolean, default: true },
         access_token: { type: String, default: null }
     },
