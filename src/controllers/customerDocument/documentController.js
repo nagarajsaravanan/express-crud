@@ -3,6 +3,7 @@ const customerDocModel = require('./../../models/customerDocument.model')
 const { mailService } = require('../emailController/emailController')
 const { ObjectId } = require('mongoose').Types;
 const fs = require('fs');
+const { log } = require('./../../libs/logger')
 
 const get = async (req, res) => {
     const customerDocument = await customerDocModel.find({ user_id: req.authUser.id }).lean()
@@ -35,14 +36,18 @@ const addOrUpdate = async (req, res) => {
         }
         saveData ? successResponse(res, { response: { user: saveData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
     } catch (error) {
+        log.error(error)
         failureResponse(res, { response: 1, message: 'error updating customer document' })
     }
 }
 
 const updateInFile = async (message) => {
     const data = fs.appendFile('public/file/customerDocumentHistory.txt', message+ '\r\n', function (err) {
-        if (err) throw err
-      });
+        if (err) { 
+            log.error(err)
+            throw err
+        }
+      })
 }
 
 module.exports = { get, addOrUpdate }

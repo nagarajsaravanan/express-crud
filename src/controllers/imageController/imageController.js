@@ -1,5 +1,6 @@
 const { successResponse, failureResponse } = require('../../utils/response')
 const mysql = require('./../../config/db/mysqlConnection')
+const { log } = require('./../../libs/logger')
 
 // get all the iamge details
 const get = async (req, res) => {
@@ -13,6 +14,7 @@ const get = async (req, res) => {
             }
         })
     } catch (error) {
+        log.error(error)
         failureResponse(res, { message: 'failed to fetch image details' })
     }
 }
@@ -30,6 +32,7 @@ const addImage = async (req, res) => {
             }
         })
     } catch (error) {
+        log.error(error)
         failureResponse(res, { message: 'failed to upload image' })
     }
 }

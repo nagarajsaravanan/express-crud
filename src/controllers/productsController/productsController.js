@@ -1,6 +1,7 @@
 const { successResponse, failureResponse } = require('../../utils/response')
 const productModel = require('../../models/productModel')
-const { ObjectId } = require('mongoose').Types;
+const { ObjectId } = require('mongoose').Types
+const { log } = require('./../../libs/logger')
 
 // get all the product details
 const get = async (req, res) => {
@@ -9,6 +10,7 @@ const get = async (req, res) => {
         
         successResponse(res, { response: { products: data }, message: 'product details fetched successfully' })
     } catch (error) {
+        log.error(error)
         failureResponse(res, { response: 1, message: 'failed to fetch the product details' })
     }
 }
@@ -43,6 +45,7 @@ const addOrUpdate = async (req, res) => {
             newData ? successResponse(res, { response: { products: newData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
         }
     } catch (error) {
+        log.error(error)
         failureResponse(res, { response: 1, message: errorMsg })
     }
 }
@@ -60,6 +63,7 @@ const destroy = async (req, res) => {
 
         updateData ? successResponse(res, { message: 'deleted successfully' }) : failureResponse(res, { message: 'error in delete the record' })
     } catch (error) {
+        log.error(error)
         failureResponse(res, { response: 1, message: 'error in delete the record' })
     }
 }

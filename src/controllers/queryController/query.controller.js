@@ -1,6 +1,6 @@
 const { successResponse, failureResponse } = require("../../utils/response")
 const userModel = require('../../models/users.model')
-const { ObjectId } = require('mongoose').Types;
+const { log } = require('./../../libs/logger')
 
 /** using project */
 const aggregateUsingProject = async (req, res) => {
@@ -20,6 +20,7 @@ const aggregateUsingProject = async (req, res) => {
         ])
         successResponse(res, { response: { user: data }, message: 'query using aggregate project.' })
     } catch (e) {
+        log.error(e)
         failureResponse(res, { response: null, message: e })
     }
 }
@@ -43,6 +44,7 @@ const aggregateUsingLookup = async (req, res) => {
         ])
         successResponse(res, { response: { user: data }, message: 'query using aggregate project.' })
     } catch (e) {
+        log.error(e)
         failureResponse(res, { response: null, message: e })
     }
 }
@@ -76,6 +78,7 @@ const aggregateUsingUnwind = async (req, res) => {
         ])
         successResponse(res, { response: { user: data }, message: 'query using aggregate project.' })
     } catch (e) {
+        log.error(e)
         failureResponse(res, { response: null, message: e })
     }
 }
@@ -91,6 +94,7 @@ const aggregateUsingGroup = async (req, res) => {
         ])
         successResponse(res, { response: { user: data }, message: 'query using aggregate project.' })
     } catch (e) {
+        log.error(e)
         failureResponse(res, { response: null, message: e })
     }
 }

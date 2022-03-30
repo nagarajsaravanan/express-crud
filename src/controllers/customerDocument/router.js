@@ -4,6 +4,7 @@ const { get, addOrUpdate } = require('./documentController.js')
 const isAuth = require('./../../middleware/verifyToken')
 const { failureResponse } = require("../../utils/response")
 const multer = require('multer')
+const { log } = require('./../../libs/logger')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'public/documents/'),
@@ -20,6 +21,7 @@ const upload = multer({
             cb(null, true);
         } else {
             cb(null, false);
+            log.error('please upload pdf file format')
             return cb(new Error('please upload pdf file format'));
         }
     }

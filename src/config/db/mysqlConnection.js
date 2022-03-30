@@ -1,4 +1,6 @@
 const mysql = require('mysql2');
+const { log } = require('./../../libs/logger')
+
     const mysqlConnection = mysql.createPool({
         host: '127.0.0.1',
         port: 3306,
@@ -7,7 +9,6 @@ const mysql = require('mysql2');
         database: 'express_crud',
         waitForConnections: true,
         connectionLimit: 1000,
-        connector: "mysql",
         connectTimeout: 30000,
         queueLimit: 0
     });
@@ -16,11 +17,11 @@ const mysql = require('mysql2');
     mysqlConnection.getConnection(function (err, conn) {
         // Do something with the connection
         if (err) {
-            console.log('Mysql connection error');
+            log.error('Mysql connection error')
             process.exit(-1);
             throw err;
         }
-        console.log('MySQL connected');
+        log.info('MySQL connected');
         // Don't forget to release the connection when finished!
         mysqlConnection.releaseConnection(conn);
     });

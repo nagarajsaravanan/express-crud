@@ -1,5 +1,6 @@
-const express = require('express');
+const express = require('express')
 const dotenv = require('dotenv')
+const { log } = require('./src/libs/logger')
 dotenv.config()
 const app = express();
 const port = 5000;
@@ -36,5 +37,5 @@ app.use('/api/v1/query', require('./src/controllers/queryController/router'))
 app.use(require('./src/exceptionHandler/exceptionHandler'))
 
 app.listen(port, () => {
-    console.log(`api is listening at ${port}`);
+    log.info(`API is listening at ${port}`);
 })

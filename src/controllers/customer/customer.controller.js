@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { mailService } = require('../emailController/emailController')
 const { ObjectId } = require('mongoose').Types;
+const { log } = require('./../../libs/logger')
 
 const login = async (req, res) => {
     try {
@@ -24,6 +25,7 @@ const login = async (req, res) => {
             failureResponse(res, { response: 1, message: 'email id is not registered.', status: 401 })
         }
     } catch (error) {
+        log.error(error)
         failureResponse(res, { response: null, message: 'try later.' })
     }
 }
@@ -67,6 +69,7 @@ const addOrUpdateUser = async (req, res) => {
         }
         saveData ? successResponse(res, { response: { user: saveData }, message: successMsg }) : failureResponse(res, { response: 1, message: errorMsg })
     } catch (error) {
+        log.error(error)
         failureResponse(res, { response: 1, message: errorMsg })
     }
 }
